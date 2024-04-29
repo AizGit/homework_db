@@ -71,29 +71,34 @@ VALUES (4, "track_4", 3);
 VALUES (5, "track_5", 4);
 VALUES (6, "track_6", 2);
 
-SELECT nickname, name FROM singers s
-LEFT JOIN mus_genres m ON s.singer_id = m.genre_id;
+SELECT name, COUNT(name) FROM mus_genres g
+JOIN mus_genre_singers ga ON g.genr_id = ga.genr_id
+JOIN singers a ON ga.singer_id = a.singer_id
+GROUP BY name;
+
 
 SELECT track_name, name COUNT(amount)  FROM tracks s
 LEFT JOIN mus_albums m ON s.track_id = m.track_id
 WHERE name BETWEEN 2019 AND 2020
 GROUP BY track_name, name;
 
-SELECT AVG (length) FROM tracks;
-
-SELECT  nickname
-FROM singers 
-WHERE id NOT IN (
-    SELECT DISTINCT id 
-    FROM mus_albums
-    WHERE year = 2020
-    );
+SELECT name, AVG(durationlenght) FROM mus_albums a
+JOIN tracks t ON a.mus_album_id = t.mus_album_id
+GROUP BY name;
+          
+SELECT nickname, year FROM singers ar
+JOIN singers_mus_albums aa ON ar.sing_id = aa.sing_id
+JOIN mus_albums al ON aa.mus_album_id = al.mus_album_id
+WHERE year != 2020
     
-SELECT name, nickname 
-FROM collections s
-LEFT JOIN singers m ON s.collection_id = m.collection_id
-WHERE nickname = 'singer_2'
-ORDER BY name;
+SELECT c.name FROM collections c
+JOIN tracks_collection ct ON c.collection_id = ct.collection_id
+JOIN tracks t ON ct.track_id = t.track_id
+JOIN mus_albums al ON t.mus_album_id = al.mus_album_id
+JOIN singers_mus_albums aa ON al.mus_alb_id = aa.mus_alb_id
+JOIN singers ar ON aa.singer_id = ar.singer_id
+WHERE ar.nickname = 'singer_2'
+
 
 
 
